@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">AppAgenda</string>
+    <string name="strMenu1">Acerda De</string>
+
+    <string name="strNombreDev">Emmanuel Noriega Vaca</string>
+    <string name="strCorreoDev">vakemi94@gmail.com</string>
+    <string name="strTelDev">4291096870</string>
+
 </resources>

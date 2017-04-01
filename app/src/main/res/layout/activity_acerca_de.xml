@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_acerca_de"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#607D8B"
+    tools:context=".AcercaDe">
+    <ImageView
+        android:id="@+id/imgFoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_dev"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp" />
+
+    <TextView
+        android:id="@+id/txtNombreDev"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgFoto"
+        android:text="@string/strNombreDev"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtCorreoDev"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/strCorreoDev"
+        android:layout_below="@id/txtNombreDev"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/txtTelDev"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/strTelDev"
+        android:layout_below="@id/txtCorreoDev"
+        android:gravity="center"/>
+
+
+</RelativeLayout>
