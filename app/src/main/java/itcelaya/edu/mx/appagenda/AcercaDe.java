@@ -18,7 +18,7 @@ import butterknife.InjectView;
  * Created by emmanuel-nova on 01/04/17.
  */
 
-public class AcercaDe  extends AppCompatActivity {
+public class AcercaDe extends AppCompatActivity {
 
     @InjectView(R.id.txtCorreoDev)
     TextView txtCorreoDev;
@@ -38,5 +38,11 @@ public class AcercaDe  extends AppCompatActivity {
         roundedDrawable.setCornerRadius(originalBitmap.getHeight());
         ImageView imageView = (ImageView) findViewById(R.id.imgFoto);
         imageView.setImageDrawable(roundedDrawable);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
     }
 }

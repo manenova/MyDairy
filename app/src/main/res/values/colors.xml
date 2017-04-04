@@ -13,4 +13,7 @@
     <color name="whiteColor">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="redColor">#F44336</color>
+
+    <color name="topPanelColor">#F5D563</color>
+    <color name="bottomPanelColor">#00BBD2</color>
 </resources>

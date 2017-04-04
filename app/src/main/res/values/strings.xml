@@ -5,5 +5,12 @@
     <string name="strNombreDev">Emmanuel Noriega Vaca</string>
     <string name="strCorreoDev">vakemi94@gmail.com</string>
     <string name="strTelDev">4291096870</string>
+    <string name="strMenu2">Agregar</string>
+
+    <string name="etiquetaGuardar">Guardar</string>
+    <string name="etiquetaContact">Agregar Contacto</string>
+    <string name="nomEvento">Nombre Evento</string>
+    <string name="desEvento">Descripcion Evento</string>
+    <string name="fechaEvento">Fecha Evento</string>
 
 </resources>
