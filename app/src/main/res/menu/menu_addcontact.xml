@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/mnuDatos" android:title="Agregar Datos" />
-    <item android:id="@+id/mnuExt" android:title="Agregar Ext Telefono y Email" />
+    <item android:id="@+id/mnuDatos" android:title="Seleccionar Telefono y Email" />
+    <item android:id="@+id/mnuExt" android:title="Agregar Telefono y Email" />
 </menu>

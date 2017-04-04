@@ -76,7 +76,7 @@ public class CrearEvento extends AppCompatActivity implements DatePickerDialog.O
         ButterKnife.inject(this);
         objBD = new BDAgenda(this,"Agenda",null,1);
         objSQL = objBD.getWritableDatabase();
-        mostrarDatos();
+        registerForContextMenu(listContact);
     }
 
 
@@ -110,7 +110,6 @@ public class CrearEvento extends AppCompatActivity implements DatePickerDialog.O
             try{
                 String SQL = "INSERT INTO evento (nomEvento,desEvento,fechaEvento) VALUES ('"+nomEvento+"','"+desEvento+"','"+fechaEvento+"')";
                 objSQL.execSQL(SQL);
-                String CONSULT = "SELECT idEvento FROM evento WHERE nomEvento = '"+nomEvento+"' AND desEvento = '"+desEvento+"' ";
                 String [] args = new String[] {nomEvento,desEvento};
                 Cursor c = objSQL.rawQuery("SELECT idEvento FROM evento WHERE nomEvento = ? AND desEvento = ?",args);
                 while(c.moveToNext()) {
@@ -128,23 +127,10 @@ public class CrearEvento extends AppCompatActivity implements DatePickerDialog.O
                 e.printStackTrace();
             }
             Toast.makeText(this,"Evento Agregado Correctamente",Toast.LENGTH_LONG).show();
-            mostrarDatos();
         }else
             Toast.makeText(this,"Campos Vacios",Toast.LENGTH_LONG).show();
     }
 
-    private void mostrarDatos(){
-       /* Cursor c = objSQL.rawQuery("SELECT * FROM evento",null);
-        while(c.moveToNext()){
-            System.out.println("IDEvento :"+c.getInt(0)+" nomEvento :"+c.getString(1)+" desEvento :"+c.getString(2)+" fechaEvento :"+c.getString(3));
-        }
-        */
-
-        Cursor c = objSQL.rawQuery("SELECT * FROM contactos",null);
-        while(c.moveToNext()){
-            System.out.println("idContact :"+c.getInt(0)+" IDEvento :"+c.getInt(1)+" nomContact :"+c.getString(2)+" telContact :"+c.getString(3)+" emailContact :"+c.getString(4));
-        }
-    }
     @Override
     protected void onRestart() {
         super.onRestart();
@@ -156,17 +142,9 @@ public class CrearEvento extends AppCompatActivity implements DatePickerDialog.O
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        for(int i=0;i<contactos_evento.size();i++)
+            contactos_evento.remove(i);
         finish();
-    }
-
-    private void setFecha() {
-        edtFechaEvento.append(String.valueOf(anio));
-        edtFechaEvento.append("-");
-        String strMes = (mes < 10) ? "0"+String.valueOf(mes) : String.valueOf(mes);
-        edtFechaEvento.append(strMes);
-        edtFechaEvento.append("-");
-        String strDia = (dia < 10) ? "0"+String.valueOf(dia) : String.valueOf(dia);
-        edtFechaEvento.append(strDia);
     }
 
     @Override
@@ -174,7 +152,13 @@ public class CrearEvento extends AppCompatActivity implements DatePickerDialog.O
         anio = year;
         mes = monthOfYear+1;
         dia = dayOfMonth;
-        setFecha();
+        edtFechaEvento.append(String.valueOf(anio));
+        edtFechaEvento.append("-");
+        String strMes = (mes < 10) ? "0"+String.valueOf(mes) : String.valueOf(mes);
+        edtFechaEvento.append(strMes);
+        edtFechaEvento.append("-");
+        String strDia = (dia < 10) ? "0"+String.valueOf(dia) : String.valueOf(dia);
+        edtFechaEvento.append(strDia);
     }
 
     @Override

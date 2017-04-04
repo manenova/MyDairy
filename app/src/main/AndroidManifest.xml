@@ -21,6 +21,7 @@
         <activity android:name=".Dashboard"></activity>
         <activity android:name=".AcercaDe"></activity>
         <activity android:name=".CrearEvento"></activity>
+        <activity android:name=".EditarEvento"></activity>
         <activity android:name=".ViewContacts"></activity>
         <activity android:name=".ViewEmails"></activity>
     </application>

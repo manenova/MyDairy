@@ -21,13 +21,6 @@ public class Contactos {
         this.emailContact = emailContact;
     }
 
-    public Contactos(int idContact, String nombContact, String telContact, String emailContact) {
-        this.idContact = idContact;
-        this.nombContact = nombContact;
-        this.telContact = telContact;
-        this.emailContact = emailContact;
-    }
-
     public Contactos() {
 
     }

@@ -121,12 +121,16 @@ public class Dashboard extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Adapter adapter = listEventos.getAdapter();
         Evento event = (Evento) adapter.getItem(info.position);
+        String idEvento = Integer.toString(event.getIdEvento());
         switch (item.getItemId()) {
             case R.id.mnuEditar:
-
+                Intent intent = new Intent(this,EditarEvento.class);
+                Bundle datos = new Bundle();
+                datos.putString("idEvento",idEvento);
+                intent.putExtras(datos);
+                startActivity(intent);
                 break;
             case R.id.mnuBorrar:
-                String idEvento = Integer.toString(event.getIdEvento());
                 String [] args = new String[] {idEvento};
                 objSQL.execSQL("DELETE FROM contactos WHERE idEvento = ?",args);
                 objSQL.execSQL("DELETE FROM evento WHERE idEvento = ?",args);

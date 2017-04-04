@@ -71,7 +71,7 @@ public class ViewContacts extends Activity {
 
     private void loadContacts() {
         progress.show();
-        int cont_phone=1;
+        int contContact=1;
         Cursor c_phone = getPhone();
         for(c_phone.moveToFirst(); !c_phone.isAfterLast(); c_phone.moveToNext()){
             String contactActual = c_phone.getString(0);
@@ -80,21 +80,29 @@ public class ViewContacts extends Activity {
             ArrayList<String> emailContact = new ArrayList<>();
             Cursor c = getPhone();
             Cursor e = getEmail();
-            while(c.moveToNext())
-                if(c.getString(0).equals(contactActual))
-                    teleContact.add(c.getString(3));
+            while(c.moveToNext()) {
+                if (c.getString(0).equals(contactActual)) {
+                    String phone = c.getString(3);
+                    phone = phone.replace(" ","");
+                    if (!existPhone(teleContact, phone))
+                        teleContact.add(phone);
+                }
+            }
             while(e.moveToNext())
                 if (e.getString(1).equals(contactActual))
-                    emailContact.add(e.getString(2));
+                    if(!existPhone(emailContact,e.getString(2)))
+                        emailContact.add(e.getString(2));
             if(!existContact(contactActual)) {
                     ContactUtil contactUtil = new ContactUtil();
-                    contactUtil.setIdContact(cont_phone);
+                    contactUtil.setIdContact(contContact);
                     contactUtil.setNomContact(contactActual);
-                    teleContact.add(phoneActual);
+                    phoneActual=phoneActual.replace(" ","");
+                    if (!existPhone(teleContact, phoneActual))
+                        teleContact.add(phoneActual);
                     contactUtil.setTeleContact(teleContact);
                     contactUtil.setEmailContact(emailContact);
                     list_contact_temp.add(contactUtil);
-                    cont_phone++;
+                    contContact++;
             }
         }
 
@@ -110,6 +118,20 @@ public class ViewContacts extends Activity {
                 return true;
         }
        return false;
+    }
+
+    private boolean existPhone(ArrayList<String> teleContact ,String numberContact){
+        for (int i=0;i<teleContact.size();i++)
+             if(numberContact.equals(teleContact.get(i)))
+                 return true;
+        return false;
+    }
+
+    private boolean existEmail(ArrayList<String> emailContact,String mailContact){
+        for(int i=0;i<emailContact.size();i++)
+            if (mailContact.equals(emailContact.get(i)))
+                return true;
+        return false;
     }
 
     private Cursor getPhone(){

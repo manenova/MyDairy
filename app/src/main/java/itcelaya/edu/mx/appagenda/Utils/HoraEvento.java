@@ -22,7 +22,7 @@ public class HoraEvento extends DialogFragment {
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
-        return new TimePickerDialog(getActivity(), (CrearEvento) getActivity(), hour, minute, DateFormat.is24HourFormat(getActivity()));
+        return new TimePickerDialog(getActivity(), (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, DateFormat.is24HourFormat(getActivity()));
     }
 
 }
