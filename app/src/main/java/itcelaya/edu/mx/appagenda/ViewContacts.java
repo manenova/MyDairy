@@ -2,6 +2,8 @@ package itcelaya.edu.mx.appagenda;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -30,6 +32,8 @@ import itcelaya.edu.mx.appagenda.Model.Contactos;
 import itcelaya.edu.mx.appagenda.Model.ViewContact;
 import itcelaya.edu.mx.appagenda.Utils.Constant;
 import itcelaya.edu.mx.appagenda.Utils.ContactUtil;
+import itcelaya.edu.mx.appagenda.Utils.ContactoDialog;
+import itcelaya.edu.mx.appagenda.Utils.SmsDialog;
 
 /**
  * Created by emmanuel-nova on 01/04/17.
@@ -44,7 +48,7 @@ public class ViewContacts extends Activity {
     ArrayList <ContactUtil> list_contact_temp = new ArrayList<>();
     private ViewContactsAdapter contactsAdapter;
     private ProgressDialog progress;
-    private String option_activity="";
+    public static String option_activityContact="";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +60,7 @@ public class ViewContacts extends Activity {
         ListContact();
         registerForContextMenu(listContacts);
         Bundle datos= getIntent().getExtras();
-        option_activity = datos.getString("optionActivity");
+        option_activityContact = datos.getString("optionActivity");
 
     }
 
@@ -196,14 +200,16 @@ public class ViewContacts extends Activity {
                 ArrayList<String> teleContact = contact.getTeleContact();
                 Intent intent = new Intent(this,ViewEmails.class);
                 Bundle array = new Bundle();
-                array.putString("optionActivity",option_activity);
+                array.putString("optionActivity",option_activityContact);
                 array.putStringArrayList("emailContact",emailContact);
                 array.putStringArrayList("teleContact",teleContact);
                 intent.putExtras(array);
                 startActivity(intent);
                 break;
             case R.id.mnuExt:
-
+                Constant.nomContacto = contact.getNomContact();
+                DialogFragment Contacto = new ContactoDialog();
+                Contacto.show(getFragmentManager(),"DATOS NUEVOS");
                 break;
         }
         return true;
