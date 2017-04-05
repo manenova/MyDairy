@@ -1,6 +1,7 @@
 package itcelaya.edu.mx.appagenda;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
@@ -9,6 +10,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+
+import itcelaya.edu.mx.appagenda.CardView.TarjetaEvento;
 
 public class Splashscreen extends Activity {
 
@@ -27,6 +31,7 @@ public class Splashscreen extends Activity {
         StartAnimations();
     }
 
+
     private void StartAnimations() {
         Animation anim = AnimationUtils.loadAnimation(this, R.anim.alpha);
         anim.reset();
@@ -36,8 +41,11 @@ public class Splashscreen extends Activity {
         anim = AnimationUtils.loadAnimation(this, R.anim.translate);
         anim.reset();
         ImageView iv = (ImageView) findViewById(R.id.splash);
+        ProgressBar progressinicio = (ProgressBar) findViewById(R.id.progressinicio);
         iv.clearAnimation();
+        progressinicio.clearAnimation();
         iv.startAnimation(anim);
+        progressinicio.startAnimation(anim);
         splashTread = new Thread() {
             @Override
             public void run() {
@@ -48,7 +56,7 @@ public class Splashscreen extends Activity {
                         sleep(100);
                         waited += 100;
                     }
-                    Intent intent = new Intent(Splashscreen.this,Dashboard.class);
+                    Intent intent = new Intent(Splashscreen.this,TarjetaEvento.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
                     Splashscreen.this.finish();

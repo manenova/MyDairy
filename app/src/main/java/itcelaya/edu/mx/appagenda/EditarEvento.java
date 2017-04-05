@@ -50,27 +50,21 @@ public class EditarEvento extends Activity implements DatePickerDialog.OnDateSet
 
     @InjectView(R.id.imbFecha)
     ImageButton imbFecha;
-
     @InjectView(R.id.edtFechaEvento)
     EditText edtFechaEvento;
-
     @InjectView(R.id.edtHoraEvento)
     EditText edtHoraEvento;
-
     @InjectView(R.id.listContact)
     ListView listContact;
-
     @InjectView(R.id.edtNomEvento)
     EditText edtNomEvento;
-
     @InjectView(R.id.edtDesEvento)
     EditText edtDesEvento;
-
     SQLiteDatabase objSQL;
     BDAgenda objBD;
-    private String idEvento;
+    public static String idEvento;
     private Evento objE;
-    public List<Contactos> contac_evento = new ArrayList<>();
+    public List<Contactos> contac_evento;
     private ContactosAdapter contactosAdapter;
 
     @Override
@@ -95,28 +89,13 @@ public class EditarEvento extends Activity implements DatePickerDialog.OnDateSet
     @Override
     protected void onRestart() {
         super.onRestart();
-        listContact.setAdapter(null);
-        reloadContactos();
-        contactosAdapter = new ContactosAdapter(this, contac_evento);
-        listContact.setAdapter(contactosAdapter);
+        getContactosDatos();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        for(int i=0;i<contactos_evento.size();i++)
-            contactos_evento.remove(i);
         finish();
-    }
-
-    private void reloadContactos(){
-        Iterator<Contact> itr = contactos_evento.iterator();
-        while(itr.hasNext()){
-            Contact temp = itr.next();
-            contac_evento.add(new Contactos(0,Integer.parseInt(idEvento),temp.getNomContacto(),temp.getTeleContacto(),temp.getEmailContacto()));
-        }
-        for(int i=0;i<contactos_evento.size();i++)
-            contactos_evento.remove(i);
     }
 
     private void getEventoDatos(){
@@ -126,20 +105,18 @@ public class EditarEvento extends Activity implements DatePickerDialog.OnDateSet
             objE = new Evento(c_evento.getInt(0),c_evento.getString(1),c_evento.getString(2),c_evento.getString(3));
         edtNomEvento.setText(objE.getNomEvento());
         edtDesEvento.setText(objE.getDesEvento());
-        String delimiter = " ";
-        String [] temp = objE.getFechaEvento().split(delimiter, 2);
+        String [] temp = objE.getFechaEvento().split(" ", 2);
         edtFechaEvento.setText(temp[0]);
         edtHoraEvento.setText(temp[1]);
-
     }
 
     private void getContactosDatos(){
-        for (int i=0;i<contac_evento.size();i++)
-            contac_evento.remove(i);
+        contac_evento = new ArrayList<>();
         String [] args = new String[] {idEvento};
-        Cursor c_contactos = objSQL.rawQuery("SELECT * FROM contactos WHERE idEvento = ?",args);
+        Cursor c_contactos = objSQL.rawQuery("SELECT * FROM contactos WHERE idEvento = ? ",args);
         while(c_contactos.moveToNext())
             contac_evento.add(new Contactos(c_contactos.getInt(0),c_contactos.getInt(1),c_contactos.getString(2),c_contactos.getString(3),c_contactos.getString(4)));
+        listContact.setAdapter(null);
         contactosAdapter = new ContactosAdapter(this,contac_evento);
         listContact.setAdapter(contactosAdapter);
     }
@@ -160,8 +137,11 @@ public class EditarEvento extends Activity implements DatePickerDialog.OnDateSet
 
     @OnClick(R.id.btnAddContact)
     public void initPickContacts(){
-        Intent intAcerca = new Intent(this,ViewContacts.class);
-        startActivity(intAcerca);
+        Intent intent = new Intent(this,ViewContacts.class);
+        Bundle array = new Bundle();
+        array.putString("optionActivity","EditarEvento");
+        intent.putExtras(array);
+        startActivity(intent);
     }
 
     @Override
@@ -203,25 +183,16 @@ public class EditarEvento extends Activity implements DatePickerDialog.OnDateSet
         Contactos contact = (Contactos) adapter.getItem(info.position);
         switch (item.getItemId()) {
             case R.id.mnuDeleteContact:
-                System.out.println("Valor position :"+info.position);
-                    deleteContacto(info.position,Integer.toString(contact.getIdContact()),contact.getNombContact());
+                String idContact = Integer.toString(contact.getIdContact());
+                deleteContacto(idContact);
                 break;
         }
         return true;
     }
 
-    private void deleteContacto(int positionContact,String idContact,String nomContact){
-        if(idContact.equals("0")){
-            for (int i=0;i<contac_evento.size();i++) {
-                Contactos temp = contac_evento.get(i);
-                if (Integer.toString(temp.getIdContact()).equals(idContact) && temp.getNombContact().equals(nomContact) && positionContact == i)
-                    contac_evento.remove(i);
-            }
-        }else{
-            String [] args = new String[] {idEvento,idContact};
-            objSQL.execSQL("DELETE FROM contactos WHERE idEvento = ? AND idContact = ?",args);
-        }
-        listContact.setAdapter(null);
+    private void deleteContacto(String idContact){
+        String [] args = new String[] {idEvento,idContact};
+        objSQL.execSQL("DELETE FROM contactos WHERE idEvento = ? AND idContact = ?",args);
         getContactosDatos();
     }
 
@@ -238,28 +209,11 @@ public class EditarEvento extends Activity implements DatePickerDialog.OnDateSet
                 valores.put("fechaEvento",fechaEvento);
                 String [] args = new String[] {idEvento};
                 objSQL.update("evento",valores,"idEvento = ?",args); //Actualizar Evento
-                objSQL.execSQL("PRAGMA FOREIGN_KEYS=ON");
-
-                Iterator<Contactos> itr = contac_evento.iterator();
-                while(itr.hasNext()){
-                    Contactos temp = itr.next();
-                    if(Integer.toString(temp.getIdContact()).equals("0")){
-                        String SQL_CONTACT = "INSERT INTO contactos (idEvento, nombContact, telContact, emailContact) VALUES ('"+idEvento+"','"+temp.getNombContact()+"','"+temp.getTelContact()+"','"+temp.getEmailContact()+"')";
-                        objSQL.execSQL(SQL_CONTACT);
-                    }else{
-                        ContentValues valores_contacto = new ContentValues();
-                        valores.put("nomContact",temp.getNombContact());
-                        valores.put("telContact",temp.getTelContact());
-                        valores.put("emailContact",temp.getEmailContact());
-                        String [] args_contacto = new String[] {idEvento,Integer.toString(temp.getIdContact())};
-                        objSQL.update("contactos",valores_contacto,"idEvento = ? AND idContact = ?",args_contacto); //Actualizar Contacto
-                    }
-                }
-                objSQL.execSQL("PRAGMA FOREIGN_KEYS=OFF");
             }catch(SQLiteException e){
                 e.printStackTrace();
             }
             Toast.makeText(this,"Evento Actualizado Correctamente",Toast.LENGTH_LONG).show();
+            finish();
         }else
             Toast.makeText(this,"Campos Vacios",Toast.LENGTH_LONG).show();
     }

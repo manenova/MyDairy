@@ -24,6 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import itcelaya.edu.mx.appagenda.Adapter.EventoAdapter;
 import itcelaya.edu.mx.appagenda.BD.BDAgenda;
+import itcelaya.edu.mx.appagenda.CardView.TarjetaContactos;
 import itcelaya.edu.mx.appagenda.Model.Evento;
 import itcelaya.edu.mx.appagenda.Model.ViewContact;
 import itcelaya.edu.mx.appagenda.Utils.Constant;
@@ -55,11 +56,7 @@ public class Dashboard extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        progress = new ProgressDialog(this);
-        progress.setMessage("Loading Events");
-        progress.show();
         loadEvents();
-        progress.hide();
     }
 
     @Override
@@ -72,8 +69,6 @@ public class Dashboard extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        progress.dismiss();
-        progress = null;
     }
 
     private void loadEvents(){
@@ -137,6 +132,13 @@ public class Dashboard extends AppCompatActivity {
                 Toast.makeText(this,"Evento eliminado",Toast.LENGTH_LONG).show();
                 listEventos.setAdapter(null);
                 loadEvents();
+                break;
+            case R.id.mnuContactos:
+                Intent inten = new Intent(this,TarjetaContactos.class);
+                Bundle dato = new Bundle();
+                dato.putString("idEvento",idEvento);
+                inten.putExtras(dato);
+                startActivity(inten);
                 break;
         }
         return true;

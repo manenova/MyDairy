@@ -44,23 +44,16 @@ public class CrearEvento extends AppCompatActivity implements DatePickerDialog.O
 
     @InjectView(R.id.imbFecha)
     ImageButton imbFecha;
-
     @InjectView(R.id.edtFechaEvento)
     EditText edtFechaEvento;
-
     @InjectView(R.id.edtHoraEvento)
     EditText edtHoraEvento;
-
     @InjectView(R.id.listContact)
     ListView listContact;
-
     @InjectView(R.id.edtNomEvento)
     EditText edtNomEvento;
-
     @InjectView(R.id.edtDesEvento)
     EditText edtDesEvento;
-
-
     ContactAdapter contactAdapter;
 
     private int anio, mes, dia;
@@ -79,7 +72,6 @@ public class CrearEvento extends AppCompatActivity implements DatePickerDialog.O
         registerForContextMenu(listContact);
     }
 
-
     @OnClick(R.id.imbFecha)
     public void getFechaEvento(){
         edtFechaEvento.setText("");
@@ -96,8 +88,11 @@ public class CrearEvento extends AppCompatActivity implements DatePickerDialog.O
 
     @OnClick(R.id.btnAddContact)
     public void initPickContacts(){
-        Intent intAcerca = new Intent(this,ViewContacts.class);
-        startActivity(intAcerca);
+        Intent intent = new Intent(this,ViewContacts.class);
+        Bundle array = new Bundle();
+        array.putString("optionActivity","CrearEvento");
+        intent.putExtras(array);
+        startActivity(intent);
     }
 
     @OnClick(R.id.btnSaveEvento)

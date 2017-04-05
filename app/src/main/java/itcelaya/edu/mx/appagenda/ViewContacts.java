@@ -44,6 +44,7 @@ public class ViewContacts extends Activity {
     ArrayList <ContactUtil> list_contact_temp = new ArrayList<>();
     private ViewContactsAdapter contactsAdapter;
     private ProgressDialog progress;
+    private String option_activity="";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +55,8 @@ public class ViewContacts extends Activity {
         loadContacts();
         ListContact();
         registerForContextMenu(listContacts);
+        Bundle datos= getIntent().getExtras();
+        option_activity = datos.getString("optionActivity");
 
     }
 
@@ -193,6 +196,7 @@ public class ViewContacts extends Activity {
                 ArrayList<String> teleContact = contact.getTeleContact();
                 Intent intent = new Intent(this,ViewEmails.class);
                 Bundle array = new Bundle();
+                array.putString("optionActivity",option_activity);
                 array.putStringArrayList("emailContact",emailContact);
                 array.putStringArrayList("teleContact",teleContact);
                 intent.putExtras(array);

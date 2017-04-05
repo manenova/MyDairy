@@ -1,6 +1,7 @@
 package itcelaya.edu.mx.appagenda;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import itcelaya.edu.mx.appagenda.Adapter.EmailsAdapter;
 import itcelaya.edu.mx.appagenda.Adapter.PhonesAdapter;
+import itcelaya.edu.mx.appagenda.BD.BDAgenda;
 import itcelaya.edu.mx.appagenda.Model.Contact;
 import itcelaya.edu.mx.appagenda.Model.Emails;
 import itcelaya.edu.mx.appagenda.Model.Phones;
@@ -39,6 +42,9 @@ public class ViewEmails extends Activity {
     List<Phones> item_phones = new ArrayList<>();
     PhonesAdapter phonesAdapter;
     private String option_item="";
+    private String option_activity="";
+    private SQLiteDatabase objSQL;
+    private BDAgenda objBD;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +53,7 @@ public class ViewEmails extends Activity {
         Bundle datos= getIntent().getExtras();
         ArrayList<String> emailContact= datos.getStringArrayList("emailContact");
         ArrayList<String> teleContact = datos.getStringArrayList("teleContact");
+        option_activity = datos.getString("optionActivity");
         for (int i=0;i<emailContact.size();i++)
             item_emails.add(new Emails(emailContact.get(i)));
         for (int j=0;j<teleContact.size(); j++)
@@ -115,7 +122,15 @@ public class ViewEmails extends Activity {
 
     @OnClick(R.id.btnAddContacto)
     public void newContacto(){
-        CrearEvento.contactos_evento.add(new Contact(Constant.nomContacto,Constant.phoneContacto,Constant.emailContacto));
+        if(option_activity.equals("CrearEvento"))
+            CrearEvento.contactos_evento.add(new Contact(Constant.nomContacto,Constant.phoneContacto,Constant.emailContacto));
+        if(option_activity.equals("EditarEvento")) {
+            objBD = new BDAgenda(this,"Agenda",null,1);
+            objSQL = objBD.getWritableDatabase();
+            String SQL_CONTACT = "INSERT INTO contactos (idEvento, nombContact, telContact, emailContact) VALUES ('"+EditarEvento.idEvento+"','"+Constant.nomContacto+"','"+Constant.phoneContacto+"','"+Constant.emailContacto+"')";
+            objSQL.execSQL(SQL_CONTACT);
+            System.out.println("Contacto Agregado a la Base ");
+        }
         Constant.nomContacto="";
         Constant.phoneContacto="";
         Constant.emailContacto="";
